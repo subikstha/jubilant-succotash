@@ -6,6 +6,7 @@ import { createStore, applyMiddleware, compose, dispatch, bindActionCreators } f
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "./sagas";
+import './CombineReducer.js'
 
 
 import Counter from "./Counter";
