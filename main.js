@@ -6,8 +6,9 @@ import { createStore, applyMiddleware, compose, dispatch, bindActionCreators } f
 import { configureStore } from "@reduxjs/toolkit";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "./sagas";
-import './CombineReducer.js'
-import './Enhancer.js'
+import './EnhancerExercise.js'
+// import './CombineReducer.js'
+// import './Enhancer.js'
 
 
 import Counter from "./Counter";
@@ -46,10 +47,10 @@ const actions = bindActionCreators({ increment, add }, anotherStore.dispatch)
 actions.add(1000)
 actions.increment()
 
-console.log('new state', anotherStore.getState())
+// console.log('new state', anotherStore.getState())
 
 
-console.log('Another store', anotherStore, anotherStore.getState())
+// console.log('Another store', anotherStore, anotherStore.getState())
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // const store = createStore(reducer);
@@ -71,7 +72,7 @@ const embolden = string => string.bold();
 
 const composed = compose(embolden, repeatThree, makeLouder);
 
-console.log('composed', composed('hello'))
+// console.log('composed', composed('hello'))
 
 function render() {
   ReactDOM.render(
