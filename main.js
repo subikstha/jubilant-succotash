@@ -1,25 +1,87 @@
-import "@babel/polyfill"
+import "@babel/polyfill";
 
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { createStore, applyMiddleware } from 'redux'
+import React from "react";
+import ReactDOM from "react-dom";
+import { createStore, applyMiddleware, compose, dispatch, bindActionCreators } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
+import createSagaMiddleware from "redux-saga";
+import rootSaga from "./sagas";
 
-import Counter from './Counter'
-import reducer from './reducers'
 
-const store = createStore(reducer)
+import Counter from "./Counter";
+import reducer from "./reducers";
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+const initialState = { value: 0 }
+const INCREMENT = 'INCREMENT';
+const ADD = 'ADD'
 
-const action = type => store.dispatch({type})
+const incrementAction = { type: 'INCREMENT' }
+const increment = () => ({ type: INCREMENT })
+const add = (amount) => ({ type: ADD, payload: amount })
+
+
+const anotherReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case INCREMENT:
+      const value = state.value + 1;
+      return { value }
+
+    case ADD:
+      return { value: state.value + action.payload }
+    default:
+      return state
+
+  }
+}
+
+
+const anotherStore = createStore(anotherReducer)
+
+const subscriber = () => console.log("SUBSCRIBER", anotherStore.getState());
+
+const actions = bindActionCreators({ increment, add }, anotherStore.dispatch)
+
+actions.add(1000)
+actions.increment()
+
+console.log('new state', anotherStore.getState())
+
+
+console.log('Another store', anotherStore, anotherStore.getState())
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// const store = createStore(reducer);
+// Create a middleware using the factory function "createSagaMiddleware"
+const sagaMiddleware = createSagaMiddleware();
+const store = configureStore({
+  reducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(sagaMiddleware),
+});
+
+sagaMiddleware.run(rootSaga);
+
+const action = (type) => store.dispatch({ type });
+
+const makeLouder = string => string.toUpperCase();
+const repeatThree = string => string.repeat(3);
+const embolden = string => string.bold();
+
+const composed = compose(embolden, repeatThree, makeLouder);
+
+console.log('composed', composed('hello'))
 
 function render() {
   ReactDOM.render(
     <Counter
       value={store.getState()}
-      onIncrement={() => action('INCREMENT')}
-      onDecrement={() => action('DECREMENT')} />,
-    document.getElementById('root')
-  )
+      onIncrement={() => action("INCREMENT")}
+      onDecrement={() => action("DECREMENT")}
+      onIncrementAsync={() => action("INCREMENT_ASYNC")}
+    />,
+    document.getElementById("root"),
+  );
 }
 
-render()
-store.subscribe(render)
+render();
+store.subscribe(render);
