@@ -1,10 +1,10 @@
 import React from 'react'
-import { Counter } from './Counterr';
+import { CounterWithoutHooksContainer } from './ConnectedCounterWithoutHooks'
 
 const Application = () => {
     return (
         <div className="Application">
-            <Counter />
+            <CounterWithoutHooksContainer />
         </div>
     );
 };
