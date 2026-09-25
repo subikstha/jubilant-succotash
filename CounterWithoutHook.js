@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
 import { setTitle } from './actions';
-export const Counter = ({ count, title, dispatch }) => {
+export const Counter = ({ count, title, setProjectTitle }) => {
     // Read the title state from the store
     const [tutorialTitle, setTutorialTitle] = useState('')
     const handleSetTitle = (event) => {
         console.log('Handle set title called', event)
         // Dispatching the title to the store
         console.log('dispatching title with the action', setTitle(title))
-        dispatch(setTitle(tutorialTitle))
+        setProjectTitle(tutorialTitle)
     }
-    console.log('Dispatch inside of the Counter', dispatch);
     return (
         <main className="Counter">
             <h1>{title}</h1>
